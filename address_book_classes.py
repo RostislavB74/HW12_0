@@ -103,14 +103,14 @@ class Record:
         self.name = name
         self.phones = []
         self.birthday = birthday
-        self.emails = []
+        self.emailes = []
         self.status = status
         self.note = note
         if email:
             if isinstance(email, list):
-                self.emailss.extend(email)
+                self.emailes.extend(email)
             else:
-                self.email.append(email)
+                self.emailes.append(email)
         if phone:
             if isinstance(phone, list):
                 self.phones.extend(phone)
@@ -151,7 +151,7 @@ class Record:
         return result
 
     def __str__(self) -> str:
-        return f"{self.name} : {', '.join(str(p) for p in self.phones)}  {(str(self.birthday))} {', '.join(str(p) for p in self.emails)} "
+        return f"{self.name} : {', '.join(str(p) for p in self.phones)}  {(str(self.birthday))} {', '.join(str(p) for p in self.emailes)} "
         # return "{:^20} {:^20} {:^20}".format(self.name, ', '.join(str(p) for p in self.phones), str(self.birthday))
 
     def remove_phone(self, phone):

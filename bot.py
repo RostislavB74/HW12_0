@@ -1,5 +1,5 @@
-from ab_classes_300723 import AddressBook, Name, Birthday, Email, Record, Phone, Note, Status
-from main_300723_good_1 import load_address_book, save_address_book
+from address_book_classes import AddressBook, Name, Birthday, Email, Record, Phone, Note, Status
+from main_work_drive import load_address_book, save_address_book
 
 
 class Bot:

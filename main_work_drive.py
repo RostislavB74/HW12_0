@@ -1,5 +1,5 @@
 from datetime import datetime
-from ab_classes_300723 import AddressBook, Name, Phone, Record, Birthday, Email, Note, Status
+from address_book_classes import AddressBook, Name, Phone, Record, Birthday, Email, Note, Status
 import re
 import pickle
 
@@ -45,12 +45,12 @@ def add_contact(*args):
                 bd = check_bd(args[i])
                 if bd:
                     return rec.add_birthday(bd)
-            phone = check_phone(args[i])
-            if phone:
+            if check_phone(args[i]):
+                # if phone:
                 list_phones.append(rec.add_phone(phone))
                 return list_phones
-            email = check_email(args[i])
-            if email:
+            if check_email(args[i]):
+                # if email:
                 list_emails.append(rec.add_email(email))
                 return list_emails
         # else:
@@ -59,15 +59,15 @@ def add_contact(*args):
         for i in range(1, len(args)):
             bd = check_bd(args[i])
             birthday = bd
-            phone = check_phone(args[i])
-            if phone:
+            if check_phone(args[i]):
+                # if phone:
                 list_phones.append(phone)
                 phone = list_phones
-            email = check_email(args[i])
-            if email:
+            if check_email(args[i]):
                 list_emails.append(args[i])
-                return list_emails
-        rec = Record(name, phone=list_phones, birthday=birthday, email=email)
+
+        rec = Record(name, phone=list_phones,
+                     birthday=birthday, email=list_emails)
         return address_book.add_record(rec)
     else:
         return "Unknown command"
@@ -168,7 +168,9 @@ def load_address_book(filename):
                 name = Name(data[0])
                 phones = [Phone(phone) for phone in data[1].split(",")]
                 birthday = Birthday(data[2]) if data[2] else None
-                record = Record(name=name, phone=phones, birthday=birthday)
+                emailes = Email(data[3]) if data[3] else None
+                record = Record(name=name, phone=phones,
+                                birthday=birthday, email=emailes)
                 address_book.add_record(record)
         return address_book
 
@@ -201,9 +203,11 @@ def save_address_book(address_book, filename=filename):
         for record in address_book.data.values():
             name = record.name.value
             phones = [phone.value for phone in record.phones]
+            emailes = [email.value for email in record.emailes]
             birthday = record.birthday.value.strftime(
                 "%d/%m/%Y") if record.birthday else ""
-            file.write(f"{name} : {','.join(phones)} : {birthday}\n")
+            file.write(
+                f"{name} : {','.join(phones)} : {birthday} : {','.join(emailes)}\n")
 
     return 'OK'
 
@@ -226,7 +230,9 @@ def search_record(*args):
             name = Name(data[0])
             phones = [Phone(phone) for phone in data[1].split(",")]
             birthday = Birthday(data[2]) if data[2] else None
-            record = Record(name=name, phone=phones, birthday=birthday)
+            emailes = Email(data[3]) if data[3] else None
+            record = Record(name=name, phone=phones,
+                            birthday=birthday, email=emailes)
             address_book_search.add_record(record)
     return address_book_search
 
