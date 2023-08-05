@@ -1,5 +1,5 @@
 from datetime import datetime
-from ab_classes_300723 import AddressBook, Name, Phone, Record, Birthday
+from ab_classes_300723 import AddressBook, Name, Phone, Record, Birthday, Email, Note
 import re
 import pickle
 
@@ -37,6 +37,7 @@ def add_contact(*args):
     bd = None
     name = Name(args[0])
     list_phones = []
+    list_emails = []
     rec: Record = address_book.get(str(name))
     if rec:
         for i in range(1, len(args)):
@@ -47,7 +48,11 @@ def add_contact(*args):
             phone = check_phone(args[i])
             if phone:
                 list_phones.append(rec.add_phone(phone))
-            return rec.add_phone(list_phones)
+                return list_phones
+            email = check_email(args[i])
+            if email:
+                list_emails.append(rec.add_email(email))
+                return list_emails
         # else:
         #     return "Unknown command"
     if not rec:
@@ -58,12 +63,18 @@ def add_contact(*args):
             if phone:
                 list_phones.append(phone)
                 phone = list_phones
-        rec = Record(name, phone=list_phones, birthday=birthday)
+            email = check_email(args[i])
+            if email:
+                list_emails.append(args[i])
+                return list_emails
+        rec = Record(name, phone=list_phones, birthday=birthday, email=email)
         return address_book.add_record(rec)
     else:
         return "Unknown command"
 
-
+def add_note(*args):
+    name = Name(args[0])
+    notes = 
 # змінити
 @input_error
 def change_phone(*args):
@@ -85,6 +96,13 @@ def check_bd(args):
     else:
         birthday = None
     return birthday
+
+
+def check_email(args):
+    pattern = "^[-a-z0-9!#$%&'*+/=?^_`{|}~]+(?:\.[-a-z0-9!#$%&'*+/=?^_`{|}~]+)*@(?:[a-z0-9]([-a-z0-9]{0,61}[a-z0-9])?\.)*(?:aero|arpa|asia|biz|cat|com|coop|edu|gov|info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel|[a-z][a-z])$"
+    if re.match (pattern, args):
+        email = Email(args)
+    return email
 
 
 def check_phone(args):
@@ -152,7 +170,7 @@ def load_address_book(filename):
                 address_book.add_record(record)
         return address_book
 
-    if filename == 'address_book.bin':
+    if filename == 'address_book.txt':
         with open(filename, "rb") as fh:
             data = pickle.load(fh)
             for keys, values in data.items():
@@ -190,34 +208,24 @@ def save_address_book(address_book, filename=filename):
 
 def search_record(*args):
     elem = args[0]
-    # print(elem)
-    # search_list = []
     save_address_book(address_book, 'search.txt')
     fh = open('result.txt', "w")
     with open("search.txt", "r") as file:
         for line in file:
-            # res = line.splitlines()
-            # str_line = ' '.join(res)
-            # print(str_line)
-            # print(str_line.find(elem))
             if not line.find(elem) == -1:
-                # print(str_line)
                 fh.write(line)
-                # res = line.splitlines()
             else:
                 continue
     fh.close()
     with open('result.txt', "r") as fh:
         address_book_search = AddressBook()
         for line in fh:
-            # print(line, end='')
             data = line.strip().split(" : ")
             name = Name(data[0])
             phones = [Phone(phone) for phone in data[1].split(",")]
             birthday = Birthday(data[2]) if data[2] else None
             record = Record(name=name, phone=phones, birthday=birthday)
             address_book_search.add_record(record)
-            # print(address_book_search)
     return address_book_search
 
 # показати все
@@ -240,7 +248,7 @@ COMMANDS = {
     get_phone: ("phone ", "5"),
     get_days_to_birthday: ("birthday", "bd", "6"),
     delete_record: ("7"),
-    # save_address_book: ('save_ab'),
+    add_note: ('note', 'нотаток'),
     search_record: ('search', "find", '8'),
     hello: ("hello", "hi", "!",)
 }
@@ -256,7 +264,7 @@ def parser(text: str):
 
 
 def main():
-    filename = "address_book.bin"
+    filename = "address_book.txt"
     try:
         load_address_book(filename)
         print("Address book loaded from file.")

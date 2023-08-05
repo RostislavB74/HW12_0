@@ -6,7 +6,7 @@ if __name__ == "__main__":
     print('Hello. I am your contact-assistant. What should I do with your contacts?')
     print('Вітаю. Я Ваш контакт-помічник. Чим я можу Вам допомогти?')
     # print('Для отримання інформації щодо команд введіть help')
-    # bot = Bot()
+    bot = Bot()
     # bot.book.load("auto_save")
     commands = ['Add-Додати', 'Search-Пошук', 'Edit-Редагувати', 'Load-Загрузити',
                 'Remove-Видалити', 'Save-Зберігти', 'Congratulate-Привітати',
@@ -21,11 +21,11 @@ if __name__ == "__main__":
                 print(format_str.format(command))
                 action = input().strip().lower()
             bot.handle(action)
-        #     if action in ['add', 'remove', 'edit']:
-        #         bot.book.save("auto_save")
-        # else:
-        #     bot.handle(action)
-        #     if action in ['add', 'remove', 'edit']:
-        #         bot.book.save("auto_save")
+            if action in ['add', 'remove', 'edit']:
+                bot.book.save("auto_save")
+        else:
+            bot.handle(action)
+            if action in ['add', 'remove', 'edit']:
+                bot.book.save("auto_save")
         if action == 'exit':
             break

@@ -69,7 +69,24 @@ class Birthday(Field):
 
 
 class Email(Field):
-    ...
+    def __init__(self, value):
+        self.__value = None
+        self.value = value
+
+    @property
+    def value(self):
+        return self.__value
+
+    @value.setter
+    def value(self, value):
+        try:
+            self.__value = value
+
+        except ValueError:
+            return
+
+    def __str__(self):
+        return self.__value
 
 
 class Status(Field):
@@ -86,9 +103,14 @@ class Record:
         self.name = name
         self.phones = []
         self.birthday = birthday
-        self.email = email
+        self.emails = []
         self.status = status
         self.note = note
+        if email:
+            if isinstance(email, list):
+                self.emailss.extend(email)
+            else:
+                self.email.append(email)
         if phone:
             if isinstance(phone, list):
                 self.phones.extend(phone)
@@ -104,9 +126,14 @@ class Record:
     def add_phone(self, phone: Phone):
         if phone.value not in [p.value for p in self.phones]:
             self.phones.append(phone)
-
             return f"phone {phone} add to contact {self.name}"
         return f"{phone} present in phones of contact {self.name}"
+
+    def add_email(self, email: Email):
+        if email.value in [e.value for e in self.emails]:
+            return f"{email} present in emails of contact {self.name}"
+        self.emails.append(email)
+        return f"email {email} add to contact {self.name}"
 
     def change_phone(self, old_phone, new_phone):
         for idx, p in enumerate(self.phones):
@@ -124,7 +151,7 @@ class Record:
         return result
 
     def __str__(self) -> str:
-        return f"{self.name} : {', '.join(str(p) for p in self.phones)}  {(str(self.birthday))}"
+        return f"{self.name} : {', '.join(str(p) for p in self.phones)}  {(str(self.birthday))} {', '.join(str(p) for p in self.emails)} "
         # return "{:^20} {:^20} {:^20}".format(self.name, ', '.join(str(p) for p in self.phones), str(self.birthday))
 
     def remove_phone(self, phone):
