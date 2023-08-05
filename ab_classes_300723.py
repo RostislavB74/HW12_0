@@ -72,12 +72,23 @@ class Email(Field):
     ...
 
 
+class Status(Field):
+    ...
+
+
+class Note(Field):
+    ...
+
+
 class Record:
 
-    def __init__(self, name: Name, phone: Phone = None, birthday: Birthday = None) -> None:
+    def __init__(self, name: Name, phone: Phone = None, birthday: Birthday = None, email: Email = None, status: Status = None, note: Note = None) -> None:
         self.name = name
         self.phones = []
         self.birthday = birthday
+        self.email = email
+        self.status = status
+        self.note = note
         if phone:
             if isinstance(phone, list):
                 self.phones.extend(phone)
@@ -93,6 +104,7 @@ class Record:
     def add_phone(self, phone: Phone):
         if phone.value not in [p.value for p in self.phones]:
             self.phones.append(phone)
+
             return f"phone {phone} add to contact {self.name}"
         return f"{phone} present in phones of contact {self.name}"
 

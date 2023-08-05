@@ -42,12 +42,14 @@ def add_contact(*args):
         for i in range(1, len(args)):
             if not rec.birthday:
                 bd = check_bd(args[i])
-                return rec.add_birthday(bd)
+                if bd:
+                    return rec.add_birthday(bd)
             phone = check_phone(args[i])
             if phone:
-                return rec.add_phone(phone)
-        else:
-            return "Unknown command"
+                list_phones.append(rec.add_phone(phone))
+            return rec.add_phone(list_phones)
+        # else:
+        #     return "Unknown command"
     if not rec:
         for i in range(1, len(args)):
             bd = check_bd(args[i])
@@ -56,10 +58,10 @@ def add_contact(*args):
             if phone:
                 list_phones.append(phone)
                 phone = list_phones
-            rec = Record(name, phone=list_phones, birthday=birthday)
-            return address_book.add_record(rec)
-        else:
-            return "Unknown command"
+        rec = Record(name, phone=list_phones, birthday=birthday)
+        return address_book.add_record(rec)
+    else:
+        return "Unknown command"
 
 
 # змінити
@@ -148,7 +150,7 @@ def load_address_book(filename):
                 birthday = Birthday(data[2]) if data[2] else None
                 record = Record(name=name, phone=phones, birthday=birthday)
                 address_book.add_record(record)
-        return 'Load'
+        return address_book
 
     if filename == 'address_book.bin':
         with open(filename, "rb") as fh:
