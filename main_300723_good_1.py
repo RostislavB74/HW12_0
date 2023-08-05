@@ -1,5 +1,5 @@
 from datetime import datetime
-from ab_classes_300723 import AddressBook, Name, Phone, Record, Birthday, Email, Note
+from ab_classes_300723 import AddressBook, Name, Phone, Record, Birthday, Email, Note, Status
 import re
 import pickle
 
