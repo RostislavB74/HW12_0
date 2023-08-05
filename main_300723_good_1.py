@@ -72,10 +72,12 @@ def add_contact(*args):
     else:
         return "Unknown command"
 
-def add_note(*args):
-    name = Name(args[0])
-    notes = 
+# def add_note(*args):
+#     name = Name(args[0])
+#     notes =
 # змінити
+
+
 @input_error
 def change_phone(*args):
     name = Name(args[0])
@@ -248,7 +250,7 @@ COMMANDS = {
     get_phone: ("phone ", "5"),
     get_days_to_birthday: ("birthday", "bd", "6"),
     delete_record: ("7"),
-    add_note: ('note', 'нотаток'),
+    # add_note: ('note', 'нотаток'),
     search_record: ('search', "find", '8'),
     hello: ("hello", "hi", "!",)
 }
